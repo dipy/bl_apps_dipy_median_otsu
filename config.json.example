@@ -5,4 +5,12 @@
     "lb": 0.2,
     "ub": "Inf",
     "img": "testdata/brad1/data.nii.gz"
+    "median_radius": 2,
+    "numpass": 5,
+    "autocrop": false,
+    "vol_idx": 0,
+    "dilate": null,
+    "dwi": "testdata/data.nii.gz",
+    "bvals": "testdata/data.bvals",
+    "bvecs": "testdata/data.bvecs"
 }

@@ -9,13 +9,39 @@ set -e
 set -x
 
 mkdir -p output
+cp $(jq -r .bvecs config.json) output/dwi.bvecs
+cp $(jq -r .bvals config.json) output/dwi.bvals
 chmod -R +w output
 
-time singularity exec -e docker://brainlife/dipy:1.1.1 dipy_mask \
+AUTOCROP=$(jq -r .autocrop config.json)
+
+if $AUTOCROP
+then
+    AUTOCROP="--autocrop"
+else
+    AUTOCROP=""
+fi
+
+DILATE=$(jq -r .dilate config.json)
+
+if [[ $DILATE = null ]]
+then
+    DILATE=""
+else
+    DILATE="--dilate $DILATE"
+fi
+
+time singularity exec -e docker://brainlife/dipy:1.1.1 dipy_median_otsu \
     --force \
     --out_dir output \
+    --save_masked \
+    --median_radius $(jq -r .median_radius config.json) \
+    --numpass $(jq -r .numpass config.json) \
+    $AUTOCROP \
+    --vol_idx $(jq -r .vol_idx config.json) \
+    $DILATE \
     --out_mask mask.nii.gz \
-    --ub $(jq -r .ub config.json) \
-    $(jq -r .img config.json) $(jq -r .lb config.json)
+    --out_masked dwi.nii.gz \
+    $(jq -r .dwi config.json)
 
 echo "done"
