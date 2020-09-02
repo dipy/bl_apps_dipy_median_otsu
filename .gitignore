@@ -1,5 +1,6 @@
 .idea
 output
+secondary
 testdata
 config.json
 build.sh

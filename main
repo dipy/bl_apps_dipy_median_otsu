@@ -13,6 +13,9 @@ cp $(jq -r .bvecs config.json) output/dwi.bvecs
 cp $(jq -r .bvals config.json) output/dwi.bvals
 chmod -R +w output
 
+mkdir -p secondary
+chmod -R +w secondary
+
 AUTOCROP=$(jq -r .autocrop config.json)
 
 if $AUTOCROP
@@ -43,5 +46,7 @@ time singularity exec -e docker://brainlife/dipy:1.1.1 dipy_median_otsu \
     --out_mask mask.nii.gz \
     --out_masked dwi.nii.gz \
     $(jq -r .dwi config.json)
+
+mv output/mask.nii.gz secondary/
 
 echo "done"
