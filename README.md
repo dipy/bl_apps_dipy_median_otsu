@@ -3,6 +3,52 @@
 
 # Dipy Brain Segmentation
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Computes a brain mask from DWI with the DIPY median_otsu method and outputs the masked DWI and the mask.**
+
+Runs dipy_median_otsu (DIPY 1.1.1) on a DWI: the selected volumes (vol_idx, default the first) are median-filtered and Otsu-thresholded to obtain a brain mask, which is then applied to the whole DWI. Use it for quick brain masking of diffusion data before model fitting or tractography. bvals and bvecs are copied unchanged to the output.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/dwi` |
+| 📤 **Outputs** | `neuro/dwi` · `neuro/mask` |
+| 🐳 **Container** | `brainlife/dipy:1.1.1` |
+| ⚙️ **Resources** | 8 CPUs |
+| 🔗 **Run it** | [doi.org/10.25663/bl.app.70](https://doi.org/10.25663/bl.app.70) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `dwi` | `neuro/dwi` | yes | DWI image with bvals and bvecs. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `output` | `neuro/dwi` | Masked DWI (dwi.nii.gz) with the original bvals and bvecs. |
+| `secondary` | `neuro/mask` | Binary brain mask computed from the DWI (mask.nii.gz). |
+
+<details>
+<summary><b>⚙️ Parameters</b> (5)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `median_radius` | number | `2` | Radius (in voxels) of the applied median filter. |
+| `numpass` | number | `5` | The number of times to pass of the median filter. |
+| `autocrop` | boolean | `false` | Check this if you'd want to crop using the bounding box defined by the masked data. For example, if diffusion images are of 1x1x1 (mm^3) or higher resolution auto-cropping could reduce their size in memory and speed up some of the analysis. |
+| `vol_idx` | string | `0` | 1D array representing indices of the last dimension of a 4D 'input_volume', i.e., gradients. The input must be provided as "0 1 2 3 4". |
+| `dilate` | string | `null` | The number of iterations for binary dilation. |
+
+</details>
+
+📚 **References used by this App:**
+- Garyfallidis E, et al. Dipy, a library for the analysis of diffusion MRI data. Front Neuroinform 8:8 (2014). [doi:10.3389/fninf.2014.00008](https://doi.org/10.3389/fninf.2014.00008)
+- Avesani P, McPherson B, Hayashi S, et al. The open diffusion data derivatives, brain data upcycling via integrated publishing of derivatives and reproducible open cloud services. Sci Data 6, 69 (2019). [doi:10.1038/s41597-019-0073-y](https://doi.org/10.1038/s41597-019-0073-y)
+
+<!-- brainlife-app:end -->
+
 The App uses Median Otsu method to do a brain segmentation of the diffusion-weighted magnetic resonance imaging data.
 
 ### Authors
